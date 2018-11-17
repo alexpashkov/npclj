@@ -1,8 +1,6 @@
 (ns npclj.core
   (:gen-class))
 
-(str "asdffsad" "asdf")
-
 (->> "asdf"
      (map identity)
      (apply str))
@@ -15,3 +13,7 @@
   "I don't do a whole lot ... yet."
   [& args]
   (read-pzl *in*))
+
+(assoc [1 2 3] 2 1000000)
+
+(get-in [[1]] [0 0])
