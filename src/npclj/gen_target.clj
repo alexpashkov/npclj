@@ -1,6 +1,15 @@
 (ns npclj.gen-target
   (:require [clojure.string :as str]))
 
+(defn- get-tile [pzl coords]
+  (get-in pzl (reverse coords)))
+
+(defn- inside? [pzl coords]
+  (number? (get-tile pzl coords)))
+
+(defn- next-coords [coords dir]
+  (map + coords dir))
+
 (defn- next-dir-gen []
   "Creates stateful next direction generator"
   (let [cur (atom 0) dirs [[1 0] [0 1] [-1 0] [0 -1]]]
@@ -8,28 +17,24 @@
        (swap! cur inc)
        dir)))
 
-(defn- coords-valid? [pzl coords]
-  "Checks if coords are direction is illegal"
-  (or (pos? (get-in pzl coords))
-      (not-every? #(and (>= % 0) (< % (dec (count pzl)))) coords)))
-
-(defn- next-coords-gen []
-  "Returns a stateful generator of next coordinates"
-  (let [next-dir (next-dir-gen)]
-    (fn [pzl cur-coords dir]
-      (let [cur-coords-no-dir-change (map + cur-coords dir)])
-      (if (coords-valid? pzl cur-coords-no-dir-change) cur-coords-no-dir-change ()))))
-
 (defn gen-target [sz]
-  "Generates a puzzle of size sz"
-  (let [next-coords (next-coords-gen)]
-    (loop [target (apply vector (repeat sz (apply vector (repeat sz 0))))
-           coords [0 0]
-           i 0]
-      (if (< i (* sz sz))
-        (recur (assoc-in target coords i)
-               (next-coords target coords dir)
-               (inc i))
-        target))))
+  "Generates solved puzzle of size sz"
+  (loop [next-dir (next-dir-gen)
+         target (into [] (repeat sz (into [] (repeat sz 0))))
+         i 1
+         coords [0 0]
+         dir (next-dir)]
+    (if (>= i (* sz sz))
+      target
+      (let [tile (get-tile target (next-coords coords dir))
+            change-dir? (or (nil? tile) (pos? tile))
+            dir (if change-dir? (next-dir) dir)]
+        (recur next-dir
+               (assoc-in target (reverse coords) i)
+               (inc i)
+               (next-coords coords dir)
+               dir)))))
 
-(assoc-in (gen-target 3) [0 0] 5)
+(gen-target 3)
+(gen-target 4)
+(gen-target 5)
