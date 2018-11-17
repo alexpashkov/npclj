@@ -12,10 +12,8 @@
 
 (defn- next-dir-gen []
   "Creates stateful next direction generator"
-  (let [cur (atom 0) dirs [[1 0] [0 1] [-1 0] [0 -1]]]
-    #(let [dir (dirs (mod @cur (count dirs)))]
-       (swap! cur inc)
-       dir)))
+  (let [cur (atom -1) dirs [[1 0] [0 1] [-1 0] [0 -1]]]
+    #(dirs (mod (swap! cur inc) (count dirs)))))
 
 (defn gen-target [sz]
   "Generates solved puzzle of size sz"
