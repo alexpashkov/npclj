@@ -12,14 +12,14 @@
   (let [cur (atom -1) dirs [[1 0] [0 1] [-1 0] [0 -1]]]
     #(dirs (mod (swap! cur inc) (count dirs)))))
 
-(defn gen-target [sz]
+(defn- gen-target- [sz]
   "Generates solved puzzle of size sz"
   (loop [next-dir (next-dir-gen)
          target (into [] (repeat sz (into [] (repeat sz 0))))
          i 1
          coords [0 0]
          dir (next-dir)]
-    (if (>= i (* sz sz))
+    (if (= i (* sz sz))
       target
       (let [tile (get-tile target (next-coords coords dir))
             change-dir? (or (nil? tile) (pos? tile))
@@ -29,3 +29,6 @@
                (inc i)
                (next-coords coords dir)
                dir)))))
+
+;; memized version of gen-target
+(def gen-target (memoize gen-target-))
