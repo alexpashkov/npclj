@@ -6,8 +6,6 @@
   (reduce #(Math/abs (+ %1 %2))
           (map - coords (utils/find-tile target tile))))
 
-(manhattan-tile 1 [1 1] [[1 2] [3 4]])
-
 (defn manhattan [pzl]
   "Inneficient manhattan distance heuristics"
   (reduce (fn [acc row]
@@ -20,5 +18,3 @@
                     row))
           0
           pzl))
-
-(manhattan [[5 2 3] [8 0 4] [7 6 1]])
