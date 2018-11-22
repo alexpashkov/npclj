@@ -1,7 +1,16 @@
-(ns npclj.solve)
+(ns npclj.solve
+  (:require [clojure.data.priority-map :refer [priority-map]]
+            [npclj.gen-target :refer [gen-target]]
+            [npclj.heuristics :refer [manhattan]]))
 
-(defn solve [pzl])
+(defrecord with-parent [pzl parent])
 
-(contains? #{[1]} [1])
+(defn solve [pzl heur]
+  (let [target (gen-target (count pzl))]
+    (loop [open-set (priority-map
+                     (->with-parent pzl nil) (heur pzl))
+           closed-set #{}
+           cur (first (peek open-set))]
+      (if (= (:pzl cur) target) cur nil))))
 
-:v
+(solve [[1, 2], [0, 3]] manhattan)
