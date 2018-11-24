@@ -1,10 +1,5 @@
 (ns npclj.target
-  (:require [clojure.string :as str]
-            [npclj.puzzle :refer [directions]]))
-
-
-(defn- get-tile [pzl coords]
-  (get-in pzl (reverse coords)))
+  (:require [npclj.puzzle :as puzzle]))
 
 (defn- next-coords [coords dir]
   (map + coords dir))
@@ -12,7 +7,7 @@
 (defn- next-dir-gen []
   "Creates stateful next direction generator"
   (let [cur (atom -1)]
-    #(directions (mod (swap! cur inc) (count directions)))))
+    #(puzzle/directions (mod (swap! cur inc) (count puzzle/directions)))))
 
 (defn- generate- [sz]
   "Generates solved puzzle of size sz"
@@ -23,7 +18,7 @@
          dir (next-dir)]
     (if (= i (* sz sz))
       target
-      (let [tile (get-tile target (next-coords coords dir))
+      (let [tile (puzzle/get-tile target (next-coords coords dir))
             change-dir? (or (nil? tile) (pos? tile))
             dir (if change-dir? (next-dir) dir)]
         (recur next-dir
@@ -32,5 +27,5 @@
                (next-coords coords dir)
                dir)))))
 
-;; memized version of gen-target
+;; memoized version of gen-target
 (def generate (memoize generate-))
