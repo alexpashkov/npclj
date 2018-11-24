@@ -1,5 +1,4 @@
 (ns npclj.solve
-  (:refer-clojure :exclude [eval])
   (:require [clojure.data.priority-map :refer [priority-map]]
             [npclj.puzzle :as puzzle]
             [npclj.target :refer [generate]]
