@@ -1,4 +1,4 @@
-(ns npclj.gen-target
+(ns npclj.target
   (:require [clojure.string :as str]))
 
 (defn- get-tile [pzl coords]

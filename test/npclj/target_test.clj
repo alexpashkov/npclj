@@ -1,8 +1,8 @@
-(ns npclj.gen-target-test
+(ns npclj.target-test
   (:require [clojure.test :refer :all]
-            [npclj.gen-target :refer :all]))
+            [npclj.target :refer :all]))
 
-(deftest gen-target-test
+(deftest target-test
   (is (= (gen-target 1) [[0]]))
   (is (= (gen-target 2) [[1 2]
                          [0 3]]))
