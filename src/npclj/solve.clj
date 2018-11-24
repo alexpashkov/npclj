@@ -4,10 +4,22 @@
             [npclj.target :refer [generate]]
             [npclj.heuristics :refer [manhattan]]))
 
+(defn- get-coords-neighbors [pzl coords]
+  (->> (map #(map + % coords) puzzle/directions)
+       (filter (partial puzzle/coords-within? pzl))))
+
+(defn- swap-tiles [pzl a-coords b-coords]
+  (let [a-tile (puzzle/get-tile pzl a-coords)
+        b-tile (puzzle/get-tile pzl b-coords)]
+    (-> pzl
+        (assoc-in (reverse a-coords) b-tile)
+        (assoc-in (reverse b-coords) a-tile))))
+
 (defn get-neighbors [pzl]
-  (let [zero-tile-coords (puzzle/find-tile pzl 0)]
-    )
-  )
+  (let [zero-coords (puzzle/find-tile pzl 0)]
+    (->> (get-coords-neighbors pzl zero-coords)
+         (map #(swap-tiles pzl zero-coords %))
+         (filter #(not= (puzzle/get-parent pzl) %)))))
 
 (defn solve [pzl heur]
   (let [target (generate (count pzl))
