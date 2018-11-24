@@ -1,5 +1,7 @@
 (ns npclj.puzzle)
 
+(def directions [[1 0] [0 1] [-1 0] [0 -1]])
+
 (defn find-tile [pzl tile]
   "Find coordinates of a tile, returns nil if not found"
   (loop [y 0]
@@ -10,7 +12,7 @@
           (recur (inc y)))))))
 
 (defn with-parent [pzl parent]
-  "Associates parent with a puzzle"
+  "Associates a parent with a puzzle"
   (with-meta pzl {:parent parent}))
 
 (defn get-parent [pzl]
@@ -23,3 +25,13 @@
 (defn a*-eval [heur pzl]
   "Evaluates puzzle "
   (+ (count-parents pzl) (heur pzl)))
+
+(defn coords-within? [pzl coords]
+  (every? #(and (>= % 0) (< % (count pzl))) coords))
+
+
+(defn get-tile-neighbors [pzl tile]
+  "Returns coords of neighbors of the tile"
+  (let [coords (find-tile pzl tile)]
+    (->> (map #(map + % coords) directions)
+         (filter (partial coords-within? pzl)))))

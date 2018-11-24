@@ -4,6 +4,11 @@
             [npclj.target :refer [generate]]
             [npclj.heuristics :refer [manhattan]]))
 
+(defn get-neighbors [pzl]
+  (let [zero-tile-coords (puzzle/find-tile pzl 0)]
+    )
+  )
+
 (defn solve [pzl heur]
   (let [target (generate (count pzl))
         a*-eval (partial puzzle/a*-eval heur)]

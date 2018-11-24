@@ -1,5 +1,7 @@
 (ns npclj.target
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [npclj.puzzle :refer [directions]]))
+
 
 (defn- get-tile [pzl coords]
   (get-in pzl (reverse coords)))
@@ -9,8 +11,8 @@
 
 (defn- next-dir-gen []
   "Creates stateful next direction generator"
-  (let [cur (atom -1) dirs [[1 0] [0 1] [-1 0] [0 -1]]]
-    #(dirs (mod (swap! cur inc) (count dirs)))))
+  (let [cur (atom -1)]
+    #(directions (mod (swap! cur inc) (count directions)))))
 
 (defn- generate- [sz]
   "Generates solved puzzle of size sz"
