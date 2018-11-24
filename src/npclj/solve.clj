@@ -18,7 +18,9 @@
 (defn get-neighbors [pzl]
   (let [zero-coords (puzzle/find-tile pzl 0)]
     (->> (get-neighboring-coords pzl zero-coords)
-         (map (partial swap-tiles pzl zero-coords))
+         (map (comp
+                #(puzzle/with-parent % pzl)
+                (partial swap-tiles pzl zero-coords)))
          (filter (partial not= (puzzle/get-parent pzl))))))
 
 (defn solve [pzl heur]
