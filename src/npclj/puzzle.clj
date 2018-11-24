@@ -1,4 +1,4 @@
-(ns npclj.pzl-utils
+(ns npclj.puzzle
   (:refer-clojure :exclude [eval]))
 
 (defn find-tile [pzl tile]

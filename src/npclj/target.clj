@@ -12,7 +12,7 @@
   (let [cur (atom -1) dirs [[1 0] [0 1] [-1 0] [0 -1]]]
     #(dirs (mod (swap! cur inc) (count dirs)))))
 
-(defn- gen-target- [sz]
+(defn- generate- [sz]
   "Generates solved puzzle of size sz"
   (loop [next-dir (next-dir-gen)
          target (into [] (repeat sz (into [] (repeat sz 0))))
@@ -31,4 +31,4 @@
                dir)))))
 
 ;; memized version of gen-target
-(def gen-target (memoize gen-target-))
+(def generate (memoize generate-))

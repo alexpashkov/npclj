@@ -1,12 +1,12 @@
 (ns npclj.solve
   (:refer-clojure :exclude [eval])
   (:require [clojure.data.priority-map :refer [priority-map]]
-            [npclj.pzl-utils :as puzzle]
-            [npclj.target :refer [gen-target]]
+            [npclj.puzzle :as puzzle]
+            [npclj.target :refer [generate]]
             [npclj.heuristics :refer [manhattan]]))
 
 (defn solve [pzl heur]
-  (let [target (gen-target (count pzl))
+  (let [target (generate (count pzl))
         eval (partial puzzle/eval heur)]
     (loop [open-set (priority-map pzl (eval pzl))
            closed-set #{}

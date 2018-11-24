@@ -1,6 +1,6 @@
 (ns npclj.heuristics
   (:require [npclj.target :refer :all]
-            [npclj.pzl-utils :as utils]))
+            [npclj.puzzle :as utils]))
 
 (defn manhattan-tile [tile coords target]
   (reduce #(Math/abs (+ %1 %2))
@@ -11,9 +11,9 @@
   (reduce (fn [acc row]
             (reduce (fn [acc tile]
                       (+ acc (manhattan-tile
-                              tile
-                              (utils/find-tile tiles tile)
-                              (gen-target (count tiles)))))
+                               tile
+                               (utils/find-tile tiles tile)
+                               (generate (count tiles)))))
                     acc
                     row))
           0
