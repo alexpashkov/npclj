@@ -6,8 +6,8 @@
 
 (defn solve [pzl heur]
   (let [target (generate (count pzl))
-        eval (partial puzzle/eval heur)]
-    (loop [open-set (priority-map pzl (eval pzl))
+        a*-eval (partial puzzle/a*-eval heur)]
+    (loop [open-set (priority-map pzl (a*-eval pzl))
            closed-set #{}
            cur (first (peek open-set))]
       (if (= cur target) cur nil))))
