@@ -13,7 +13,7 @@
                  [[0 2]
                   [1 3]]])
              (every? #(= (puzzle/get-parent %) parent) neighbors)))
-      "returns a collection of neighbors with each item associated with parent")
+      "returns a collection of neighbors with each item associated with a parent")
 
   (is (= (-> [[1 2]
               [0 3]]
