@@ -50,4 +50,7 @@
 
 
 
-(puzzle/get-parents (solve [[1 0], [3 2]] manhattan))
+(puzzle/get-parents (solve [[1 2 3 4],
+                            [12 13 0 5]
+                            [11 15 14 8]
+                            [10 9 7 6]] manhattan))
