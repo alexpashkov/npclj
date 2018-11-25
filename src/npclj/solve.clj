@@ -46,6 +46,7 @@
                             (contains? @closed-set neighbor))
                 (swap! open-set assoc neighbor neighbor-cost))))
           (recur (first (peek @open-set))))
-        cur)))
+        cur))))
 
-  (solve [[1 2], [0 3]] manhattan))
+
+(solve [[1 2], [0 3]] manhattan)
