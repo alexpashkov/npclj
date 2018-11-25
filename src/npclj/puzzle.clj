@@ -21,6 +21,12 @@
 (defn get-parent [pzl]
   (:parent (meta pzl)))
 
+(defn get-parents [pzl]
+  (loop [parent (get-parent pzl) parents ()]
+    (if parent
+      (recur (get-parent parent) (conj parents parent))
+      parents)))
+
 (defn count-parents [pzl]
   (loop [pzl pzl count 0]
     (if pzl (recur (get-parent pzl) (inc count)) count)))

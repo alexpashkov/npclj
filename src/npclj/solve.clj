@@ -49,4 +49,5 @@
         cur))))
 
 
-(solve [[1 2], [0 3]] manhattan)
+
+(puzzle/get-parents (solve [[1 0], [3 2]] manhattan))
