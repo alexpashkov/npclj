@@ -25,10 +25,27 @@
 
 (defn solve [pzl heur]
   (let [target (generate (count pzl))
-        a*-eval (partial puzzle/a*-eval heur)]
-    (loop [open-set (priority-map pzl (a*-eval pzl))
-           closed-set #{}
-           cur (first (peek open-set))]
-      (if (= cur target) cur nil))))
+        a*-eval (partial puzzle/a*-eval heur)
+        open-set (atom (priority-map pzl (a*-eval pzl)))
+        closed-set (atom #{})]
+    (loop [cur (first (peek @open-set))]
+      (swap! open-set pop)
+      (swap! closed-set conj cur)
+      (if (not= cur target)
+        (do
+          (doseq [neighbor (get-neighbors cur)]
+            (let [neighbor-cost (a*-eval neighbor)]
+              (when-let [neighbor-cost-in-open-set (@open-set neighbor)]
+                (when (< neighbor-cost neighbor-cost-in-open-set)
+                  (swap! open-set dissoc neighbor)))
+              (when-let [neighbor-in-closed-set (@closed-set neighbor)]
+                (when (< (puzzle/count-parents neighbor)
+                         (puzzle/count-parents neighbor-in-closed-set))
+                  (swap! closed-set dissoc neighbor)))
+              (when-not (or (contains? @open-set neighbor)
+                            (contains? @closed-set neighbor))
+                (swap! open-set assoc neighbor neighbor-cost))))
+          (recur (first (peek @open-set))))
+        cur)))
 
-(solve [[1, 2], [0, 3]] manhattan)
+  (solve [[1 2], [0 3]] manhattan))
