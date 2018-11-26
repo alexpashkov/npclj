@@ -28,26 +28,31 @@
         a*-eval (partial puzzle/a*-eval heur)
         open-set (atom (priority-map pzl (a*-eval pzl)))
         closed-set (atom #{})]
-    (loop [cur (first (peek @open-set))]
-      (swap! open-set pop)
-      (swap! closed-set conj cur)
-      (if (not= cur target)
-        (do
-          (doseq [neighbor (get-neighbors cur)]
-            (let [neighbor-cost (a*-eval neighbor)]
-              (when-let [neighbor-cost-in-open-set (@open-set neighbor)]
-                (when (< neighbor-cost neighbor-cost-in-open-set)
-                  (swap! open-set dissoc neighbor)))
-              (when-let [neighbor-in-closed-set (@closed-set neighbor)]
-                (when (< (puzzle/count-parents neighbor)
-                         (puzzle/count-parents neighbor-in-closed-set))
-                  (swap! closed-set dissoc neighbor)))
-              (when-not (or (contains? @open-set neighbor)
-                            (contains? @closed-set neighbor))
-                (swap! open-set assoc neighbor neighbor-cost))))
-          (recur (first (peek @open-set))))
-        cur))))
+    (loop []
+      (let [cur (first (peek @open-set)) ]
+        (swap! open-set pop)
+        (swap! closed-set conj cur)
+        (if (not= cur target)
+          (do
+            (doseq [neighbor (get-neighbors cur)]
+              (let [neighbor-cost (a*-eval neighbor)]
+                (when-let [neighbor-cost-in-open-set (@open-set neighbor)]
+                  (when (< neighbor-cost neighbor-cost-in-open-set)
+                    (swap! open-set dissoc neighbor)))
+                (when-let [neighbor-in-closed-set (@closed-set neighbor)]
+                  (when (< (puzzle/count-parents neighbor)
+                           (puzzle/count-parents neighbor-in-closed-set))
+                    (swap! closed-set dissoc neighbor)))
+                (when-not (or (contains? @open-set neighbor)
+                              (contains? @closed-set neighbor))
+                  (swap! open-set assoc neighbor neighbor-cost))))
+            (recur))
+          cur)
+        )
+      )))
 
+
+(puzzle/get-parents (solve [[0 2 3] [1 8 4] [7 6 5]] manhattan))
 
 
 (puzzle/get-parents (solve [[12 3 4 5],
