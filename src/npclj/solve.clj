@@ -38,7 +38,7 @@
                                   neighbor)
                                  (puzzle/count-parents
                                   neighbor-in-closed-set)))
-                       (dissoc closed-set neighbor-in-closed-set)
+                       (disj closed-set neighbor-in-closed-set)
                        closed-set)]
       (recur a*-eval
              (rest neighbors)
@@ -73,7 +73,7 @@
                             [5 4 2]
                             [7 6 3]] manhattan))
 
-(puzzle/get-parents (solve [[2  12 3  4]
-                            [11  1  13 5]
-                            [10 15 14 8]
-                            [0 9  7  6]] manhattan))
+(puzzle/get-parents (solve [[2  12 4  5]
+                            [11  13  3 8]
+                            [10 1 14 6]
+                            [9 15  7  0]] manhattan))
