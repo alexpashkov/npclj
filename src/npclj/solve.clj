@@ -19,43 +19,41 @@
   (let [zero-coords (puzzle/find-tile pzl 0)]
     (->> (get-neighboring-coords pzl zero-coords)
          (map (comp
-                #(puzzle/with-parent % pzl)
-                (partial swap-tiles pzl zero-coords)))
+               #(puzzle/with-parent % pzl)
+               (partial swap-tiles pzl zero-coords)))
          (filter (partial not= (puzzle/get-parent pzl))))))
+
+(defn handle-neighbors [a*-eval neighbors open-set closed-set]
+  (doseq [neighbor neighbors]
+    (let [neighbor-cost (a*-eval neighbor)]
+      (when-let [neighbor-cost-in-open-set (@open-set neighbor)]
+        (when (< neighbor-cost neighbor-cost-in-open-set)
+          (swap! open-set dissoc neighbor)))
+      (when-let [neighbor-in-closed-set (@closed-set neighbor)]
+        (when (< (puzzle/count-parents neighbor)
+                 (puzzle/count-parents neighbor-in-closed-set))
+          (swap! closed-set dissoc neighbor)))
+      (when-not (or (contains? @open-set neighbor)
+                    (contains? @closed-set neighbor))
+        (swap! open-set assoc neighbor neighbor-cost)))))
 
 (defn solve [pzl heur]
   (let [target (generate (count pzl))
         a*-eval (partial puzzle/a*-eval heur)
+        handle-neighbors (partial handle-neighbors a*-eval)
         open-set (atom (priority-map pzl (a*-eval pzl)))
         closed-set (atom #{})]
     (loop []
-      (let [cur (first (peek @open-set)) ]
+      (let [cur (first (peek @open-set))]
         (swap! open-set pop)
         (swap! closed-set conj cur)
         (if (not= cur target)
           (do
-            (doseq [neighbor (get-neighbors cur)]
-              (let [neighbor-cost (a*-eval neighbor)]
-                (when-let [neighbor-cost-in-open-set (@open-set neighbor)]
-                  (when (< neighbor-cost neighbor-cost-in-open-set)
-                    (swap! open-set dissoc neighbor)))
-                (when-let [neighbor-in-closed-set (@closed-set neighbor)]
-                  (when (< (puzzle/count-parents neighbor)
-                           (puzzle/count-parents neighbor-in-closed-set))
-                    (swap! closed-set dissoc neighbor)))
-                (when-not (or (contains? @open-set neighbor)
-                              (contains? @closed-set neighbor))
-                  (swap! open-set assoc neighbor neighbor-cost))))
+            (handle-neighbors (get-neighbors cur) open-set closed-set)
             (recur))
-          cur)
-        )
-      )))
+          cur)))))
 
-
-(puzzle/get-parents (solve [[0 2 3] [1 8 4] [7 6 5]] manhattan))
-
-
-(puzzle/get-parents (solve [[12 3 4 5],
-                            [2 1 13 0]
+(puzzle/get-parents (solve [[12 3  4  5]
+                            [2  1  13 0]
                             [11 15 14 8]
-                            [10 9 7 6]] manhattan))
+                            [10 9  7  6]] manhattan))
