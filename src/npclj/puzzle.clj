@@ -1,4 +1,5 @@
-(ns npclj.puzzle)
+(ns npclj.puzzle
+  (:refer-clojure :exclude [reduce]))
 
 (def directions [[1 0] [0 1] [-1 0] [0 -1]])
 
@@ -37,3 +38,17 @@
 
 (defn coords-within? [pzl coords]
   (every? #(and (>= % 0) (< % (count pzl))) coords))
+
+
+(defn reduce
+  [f seed pzl]
+  (loop [acc seed pzl pzl y 0]
+    (if-let [row (first pzl)]
+      (recur
+        (loop [acc acc row row x 0]
+          (if-let [tile (first row)]
+            (recur (f acc tile [x y]) (rest row) (inc x))
+            acc))
+        (rest pzl)
+        (inc y))
+      acc)))
