@@ -2,18 +2,15 @@
   (:require [npclj.target :as target]
             [npclj.puzzle :as puzzle]))
 
-(defn manhattan-tile [tile coords target find-tile]
-  (reduce #(Math/abs (+ %1 %2))
-          (map - coords (find-tile target tile))))
-
-(defn manhattan [pzl]
-  (let [target (target/generate (count pzl))
-        find-tile (memoize puzzle/find-tile)]
+(defn heuristics [f pzl]
+  (let [target (target/generate (count pzl))]
     (puzzle/reduce (fn [acc tile coords]
-                     (+ acc (manhattan-tile
-                              tile
-                              coords
-                              target
-                              find-tile)))
+                     (+ acc (f target tile coords)))
                    0
                    pzl)))
+
+(defn manhattan-tile [target tile coords]
+  (reduce #(Math/abs (+ %1 %2))
+          (map - coords (puzzle/find-tile target tile))))
+
+(def manhattan (partial heuristics manhattan-tile))
