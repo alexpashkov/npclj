@@ -69,9 +69,9 @@
 (puzzle/get-parents (solve [[0 1]
                             [3 2]] manhattan))
 
-(puzzle/get-parents (solve [[8 0 1]
-                            [5 4 2]
-                            [7 6 3]] manhattan))
+(puzzle/get-parents (solve [[5 3 8]
+                            [2 0 1]
+                            [7 6 4]] manhattan))
 
 (puzzle/get-parents (solve [[2  12 4  5]
                             [11  13  3 8]

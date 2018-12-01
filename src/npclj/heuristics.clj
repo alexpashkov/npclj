@@ -1,22 +1,19 @@
 (ns npclj.heuristics
-  (:require [npclj.target :refer :all]
-            [npclj.puzzle :as utils]))
+  (:require [npclj.target :as target]
+            [npclj.puzzle :as puzzle]))
 
-(defn manhattan-tile [tile coords target]
+(defn manhattan-tile [tile coords target find-tile]
   (reduce #(Math/abs (+ %1 %2))
-          (map - coords (utils/find-tile target tile))))
+          (map - coords (find-tile target tile))))
 
-(defn manhattan [tiles]
-  "Inneficient manhattan distance heuristics"
-  (reduce (fn [acc row]
-            (reduce (fn [acc tile]
-                      (+ acc (manhattan-tile
-                               tile
-                               (utils/find-tile tiles tile)
-                               (generate (count tiles)))))
-                    acc
-                    row))
-          0
-          tiles))
-
-(manhattan [[1 2] [0 3]])
+(defn manhattan [pzl]
+  (let [target (target/generate (count pzl))
+        find-tile (memoize puzzle/find-tile)]
+    (puzzle/reduce (fn [acc tile coords]
+                     (+ acc (manhattan-tile
+                              tile
+                              coords
+                              target
+                              find-tile)))
+                   0
+                   pzl)))
