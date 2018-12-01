@@ -9,8 +9,13 @@
                    0
                    pzl)))
 
+(defn abs [x]
+  (if (neg? x) (- x) x))
+
 (defn manhattan-tile [target tile coords]
-  (reduce #(Math/abs (+ %1 %2))
-          (map - coords (puzzle/find-tile target tile))))
+  (apply (comp abs +)
+         (map -
+              coords
+              (puzzle/find-tile target tile))))
 
 (def manhattan (partial heuristics manhattan-tile))
