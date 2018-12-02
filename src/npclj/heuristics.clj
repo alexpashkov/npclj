@@ -13,8 +13,8 @@
   (if (neg? x) (- x) x))
 
 (defn manhattan-tile [target tile coords]
-  (apply (comp abs +)
-         (map -
+  (apply +
+         (map (comp abs -)
               coords
               (puzzle/find-tile target tile))))
 
