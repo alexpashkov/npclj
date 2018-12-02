@@ -11,7 +11,7 @@
   (if (= size 1)
     #" *(:?\d+) *(?:#[^\n]*)?"
     (re-pattern
-      (str " *((:?\\d+ +){" (- size 1) "}(:?\\d+)) *(?:#[^\\n]*)?"))))
+     (str " *((:?\\d+ +){" (- size 1) "}(:?\\d+)) *(?:#[^\\n]*)?"))))
 
 (defn- parse-puzzle-row
   [size line]
@@ -25,7 +25,7 @@
   (when size-line
     (try
       (Integer/parseInt
-        (second (re-matches #"^ *(\d) *(?:#[^\n]*)?$" size-line)))
+       (second (re-matches #"^ *(\d) *(?:#[^\n]*)?$" size-line)))
       (catch NumberFormatException e nil))))
 
 (defn- puzzle-get-lines
