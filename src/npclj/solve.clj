@@ -56,21 +56,21 @@
         handle-neighbors (partial handle-neighbors a*-eval)]
     (loop [open-set (priority-map pzl (a*-eval pzl))
            closed-set #{}]
-      (let [cur (peek open-set)
-            open-set (pop open-set)
-            closed-set (conj closed-set cur)]
-        (if (not= cur target)
-          (let [[open-set closed-set] (handle-neighbors (get-neighbors cur)
-                                                        open-set
-                                                        closed-set)]
-            (recur open-set closed-set))
-          cur)))))
+      (when-let [cur (peek open-set)]
+        (let [open-set (pop open-set)
+              closed-set (conj closed-set cur)]
+          (if (not= cur target)
+            (let [[open-set closed-set] (handle-neighbors (get-neighbors cur)
+                                                          open-set
+                                                          closed-set)]
+              (recur open-set closed-set))
+            cur))))))
 
 (puzzle/get-parents (solve [[0 1]
                             [3 2]] manhattan))
 
-(puzzle/get-parents (solve [[5 3 8]
-                            [2 0 1]
+(puzzle/get-parents (solve [[5 2 8]
+                            [0 3 1]
                             [7 6 4]] manhattan))
 
 (puzzle/get-parents (solve [[2  12 4  5]
