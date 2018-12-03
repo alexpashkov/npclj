@@ -65,15 +65,3 @@
                                                           closed-set)]
               (recur open-set closed-set))
             cur))))))
-
-(puzzle/get-parents (solve [[0 1]
-                            [3 2]] manhattan))
-
-(puzzle/get-parents (solve [[5 2 8]
-                            [0 3 1]
-                            [7 6 4]] manhattan))
-
-(puzzle/get-parents (solve [[2  12 4  5]
-                            [11  13  3 8]
-                            [10 1 14 6]
-                            [9 15  7  0]] manhattan))
