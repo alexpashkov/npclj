@@ -3,6 +3,9 @@
 
 (def directions [[1 0] [0 1] [-1 0] [0 -1]])
 
+(defn size [pzl]
+  (count (first pzl)))
+
 (def find-tile
   (memoize
     (fn [pzl tile]
@@ -41,7 +44,6 @@
 (defn coords-within? [pzl coords]
   (every? #(and (>= % 0) (< % (count pzl))) coords))
 
-
 (defn reduce
   [f seed pzl]
   (loop [acc seed pzl pzl y 0]
@@ -54,3 +56,12 @@
         (rest pzl)
         (inc y))
       acc)))
+
+(defn valid? [pzl]
+  (let [size (size pzl)]
+    (and (>= size 2)
+         (vector? pzl)
+         (every? #(and (= (count %) size)
+                       (every? int? %)) pzl)
+         (= (range (* size size))
+            (-> pzl (flatten) (sort))))))
