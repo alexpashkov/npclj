@@ -31,7 +31,8 @@
                               (line->row line)))))
 
 (defn parse [lines]
-  (try
-    (let [pzl (reduce parse-line nil lines)]
-      (if (puzzle/valid? pzl) pzl nil))
-    (catch Exception _ nil)))
+  (when-let [pzl
+        (try
+          (reduce parse-line nil lines)
+          (catch Exception _ nil))]
+    (when (puzzle/valid? pzl) pzl)))
