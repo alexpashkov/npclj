@@ -20,10 +20,9 @@
                    (format "^\\s*(\\d+\\s+){%d}\\d+\\s*$"
                            (dec size)))
                   line)
-    (->> (str/split line #"\s+")
-         (filter seq)
-         (map parse-int)
-         (into []))
+    (into [] (comp (filter seq)
+                   (map parse-int))
+          (str/split line #"\s+"))
     (throw (Exception. "invalid row"))))
 
 (defn parse-line [pzl line]
