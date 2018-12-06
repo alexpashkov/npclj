@@ -14,25 +14,28 @@
        (re-find #"^\s*\d+\s*$")
        (parse-int)))
 
-(defn- line->row [line]
-  (if (re-matches #"^\s*(\d+\s+){1,}\d+\s*$" line)
+(defn- line->row [size line]
+  (if (re-matches (re-pattern
+                    (format "^\\s*(\\d+\\s+){%d}\\d+\\s*$"
+                            (dec size)))
+                  line)
     (->> (str/split line #"\s+")
          (filter seq)
          (map parse-int)
          (into []))
-    (throw (Exception. "line cannot be parsed as a puzzle row"))))
+    (throw (Exception. "invalid row"))))
 
 (defn parse-line [pzl line]
   (let [line (remove-comments line)]
     (cond (empty? line) pzl
           (nil? pzl) (line->size line)
-          (number? pzl) (recur [] line)
+          (number? pzl) [(line->row pzl line)]
           (vector? pzl) (conj pzl
-                              (line->row line)))))
+                              (line->row (puzzle/size pzl) line)))))
 
 (defn parse [lines]
   (when-let [pzl
-        (try
-          (reduce parse-line nil lines)
-          (catch Exception _ nil))]
+             (try
+               (reduce parse-line nil lines)
+               (catch Exception _ nil))]
     (when (puzzle/valid? pzl) pzl)))
