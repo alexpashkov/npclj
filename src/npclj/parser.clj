@@ -1,7 +1,7 @@
 (ns npclj.parser
-  (:gen-class)
   (:require [clojure.string :as str]
-            [npclj.puzzle :as puzzle]))
+            [npclj.puzzle :as puzzle])
+  (:gen-class))
 
 (defn- remove-comments [line]
   (str/replace line #"#.*" ""))
@@ -11,13 +11,14 @@
 
 (defn- line->size [line]
   (->> line
-       (re-find #"^\s*\d+\s*$")
+       (re-find #"^\s*(\d+)\s*$")
+       (second)
        (parse-int)))
 
 (defn- line->row [size line]
   (if (re-matches (re-pattern
-                    (format "^\\s*(\\d+\\s+){%d}\\d+\\s*$"
-                            (dec size)))
+                   (format "^\\s*(\\d+\\s+){%d}\\d+\\s*$"
+                           (dec size)))
                   line)
     (->> (str/split line #"\s+")
          (filter seq)
