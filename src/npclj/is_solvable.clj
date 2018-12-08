@@ -1,33 +1,31 @@
 (ns npclj.is-solvable
-  (:require [npclj.target :as target])
+  (:require [npclj.target :as target]
+            [npclj.puzzle :as puzzle])
   (:gen-class))
 
-(defn- count-inversions-for-index
-  [flat-pzl idx]
-  (let [pzl-len (count flat-pzl)
-        cur-tile (nth flat-pzl idx)]
-    (loop [i idx
-           inversion 0]
-      (if (< i pzl-len)
-        (if (> cur-tile (nth flat-pzl i))
-          (recur (+ 1 i) (+ 1 inversion))
-          (recur (+ 1 i) inversion))
-        inversion))))
+(defn- tile-inversions [pzl tile [x y]]
+  (puzzle/reduce (fn [acc cur-tile [cur-x cur-y]]
+                   (if (and (or (> cur-y y)
+                                (and (= cur-y y)
+                                     (> cur-x x)))
+                            (pos? cur-tile)
+                            (> tile cur-tile))
+                     (inc acc)
+                     acc))
+                 0
+                 pzl))
 
-(defn- count-inversions
-  [pzl]
-  (let [flat-pzl (flatten pzl)
-        flat-pzl-no-zero (filter #(not= 0 %) flat-pzl)]
-    (reduce
-      (fn [inversions zipped-pzl]
-        (let [[idx _] zipped-pzl]
-          (+ inversions (count-inversions-for-index flat-pzl idx))
-          ))
-      (if (even? (count pzl)) (.indexOf flat-pzl 0) 0)
-      (map-indexed (fn [idx item] [idx item]) flat-pzl))))
 
-(defn is-solvable
-  [pzl]
+(defn- inversions [pzl]
+  (puzzle/reduce (fn [acc tile coords]
+                   (+ acc (tile-inversions pzl tile coords)))
+                 (if (even? (puzzle/size pzl))
+                   (puzzle/flat-find-tile pzl 0)
+                   0)
+                 pzl))
+
+
+(defn solvable? [pzl]
   (=
-    (even? (count-inversions pzl))
-    (even? (count-inversions (target/generate (count pzl))))))
+    (even? (inversions pzl))
+    (even? (inversions (target/generate (puzzle/size pzl))))))
