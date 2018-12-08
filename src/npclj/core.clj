@@ -31,9 +31,12 @@
             (println "Solving...")
             (if (solvable? pzl)
               (if-let [solved (solve pzl heuristic-fn)]
-                (doseq [parent (puzzle/get-parents solved)]
+                (do
+                  (doseq [parent (puzzle/get-parents solved)]
+                    (println)
+                    (puzzle/prn parent))
                   (println)
-                  (puzzle/prn parent))
+                  (puzzle/prn solved))
                 ;; It must be impossible to get here after solvable? check, but just in case
                 (println "The puzzle isn't solvable"))
               (println "The puzzle isn't solvable")))
