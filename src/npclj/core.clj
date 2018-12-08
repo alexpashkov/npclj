@@ -23,19 +23,19 @@
          errors                    :errors} (cli/parse-opts args cli-options)]
     (if-not errors
       (do
-        ;(println "Waiting for a puzzle...")
+        (println "Waiting for a puzzle...")
         (if-let [pzl (parse (line-seq (java.io.BufferedReader. *in*)))]
           (do
-            ;(println "The puzzle is:")
-            ;(puzzle/prn pzl)
-            (println (solvable? pzl))
-            ;(println "Solving...")
-
-            ;(if-let [solved (solve pzl heuristic-fn)]
-            ;  (doseq [parent (puzzle/get-parents solved)]
-            ;    (println)
-            ;    (puzzle/prn parent))
-            ;  (println "The puzzle isn't solvable"))
-            )
+            (println "The puzzle is:")
+            (puzzle/prn pzl)
+            (println "Solving...")
+            (if (solvable? pzl)
+              (if-let [solved (solve pzl heuristic-fn)]
+                (doseq [parent (puzzle/get-parents solved)]
+                  (println)
+                  (puzzle/prn parent))
+                ;; It must be impossible to get here after solvable? check, but just in case
+                (println "The puzzle isn't solvable"))
+              (println "The puzzle isn't solvable")))
           (println "Failed to read a puzzle")))
       (doseq [err errors] (println err)))))
