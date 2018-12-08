@@ -19,13 +19,14 @@
   [& args]
   (let [{{heuristic-fn :heuristic} :options
          errors                    :errors} (cli/parse-opts args cli-options)]
-    (if errors (doseq [err errors] (println err))
-               (do
-                 (println "Waiting for a puzzle...")
-                 (if-let [pzl (parse (line-seq (java.io.BufferedReader. *in*)))]
-                   (do
-                     (println "The puzzle is" pzl)
-                     (if-let [solved (solve pzl heuristic-fn)]
-                       (doseq [parent (puzzle/get-parents solved)] (println parent))
-                       (println "The puzzle isn't solvable")))
-                   (println "Failed to read a puzzle"))))))
+    (if-not errors
+      (do
+        (println "Waiting for a puzzle...")
+        (if-let [pzl (parse (line-seq (java.io.BufferedReader. *in*)))]
+          (do
+            (println "The puzzle is" pzl)
+            (if-let [solved (solve pzl heuristic-fn)]
+              (doseq [parent (puzzle/get-parents solved)] (println parent))
+              (println "The puzzle isn't solvable")))
+          (println "Failed to read a puzzle")))
+      (doseq [err errors] (println err)))))
