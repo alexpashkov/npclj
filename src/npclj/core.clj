@@ -5,11 +5,15 @@
             [npclj.heuristics :refer [manhattan]])
   (:gen-class))
 
+(set! *warn-on-reflection* true)
+
 (defn -main
   [& args]
-  (println "Waiting for puzzle...")
+  (println "Waiting for a puzzle...")
   (if-let [pzl (parse (line-seq (java.io.BufferedReader. *in*)))]
-    (if-let [solved (solve pzl manhattan)]
-      (println (puzzle/get-parents solved))
-      (println "Puzzle isn't solvable"))
-    (println "Failed to read puzzle")))
+    (do
+      (println "The puzzle is" pzl)
+      (if-let [solved (solve pzl manhattan)]
+        (println (puzzle/get-parents solved))
+        (println "The puzzle isn't solvable")))
+    (println "Failed to read a puzzle")))
