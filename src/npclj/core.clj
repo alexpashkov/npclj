@@ -8,7 +8,7 @@
   (:gen-class))
 
 (def cli-options [["-h" "--heuristic NAME" "Heuristic name"
-                   :default "manhattan"
+                   :default (heuristic/fns "manhattan")
                    :parse-fn heuristic/fns
                    :validate [fn?
                               (str "Unknown heuristic is provided. "
@@ -17,15 +17,15 @@
 
 (defn -main
   [& args]
-  (let [{{heuristics-fn :heuristic} :options
-         errors                      :errors} (cli/parse-opts args cli-options)]
+  (let [{{heuristic-fn :heuristic} :options
+         errors                    :errors} (cli/parse-opts args cli-options)]
     (if errors (doseq [err errors] (println err))
                (do
                  (println "Waiting for a puzzle...")
                  (if-let [pzl (parse (line-seq (java.io.BufferedReader. *in*)))]
                    (do
                      (println "The puzzle is" pzl)
-                     (if-let [solved (solve pzl heuristics-fn)]
-                       (println (puzzle/get-parents solved))
+                     (if-let [solved (solve pzl heuristic-fn)]
+                       (doseq [parent (puzzle/get-parents solved)] (println parent))
                        (println "The puzzle isn't solvable")))
                    (println "Failed to read a puzzle"))))))
