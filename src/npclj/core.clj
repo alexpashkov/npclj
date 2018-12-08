@@ -5,8 +5,7 @@
             [npclj.solve :refer [solve]]
             [npclj.puzzle :as puzzle]
             [npclj.heuristic :as heuristic]
-            [npclj.is-solvable :refer [solvable?]]
-            )
+            [npclj.is-solvable :refer [solvable?]])
   (:gen-class))
 
 (def cli-options [["-h" "--heuristic NAME" "Heuristic name"
@@ -29,16 +28,14 @@
             (println "The puzzle is:")
             (puzzle/prn pzl)
             (println "Solving...")
-            (if (solvable? pzl)
-              (if-let [solved (solve pzl heuristic-fn)]
-                (do
-                  (doseq [parent (puzzle/get-parents solved)]
-                    (println)
-                    (puzzle/prn parent))
+            (if-let [solved (and (solvable? pzl)
+                                 (solve pzl heuristic-fn))]
+              (do
+                (doseq [parent (puzzle/get-parents solved)]
                   (println)
-                  (puzzle/prn solved))
-                ;; It must be impossible to get here after solvable? check, but just in case
-                (println "The puzzle isn't solvable"))
+                  (puzzle/prn parent))
+                (println)
+                (puzzle/prn solved))
               (println "The puzzle isn't solvable")))
           (println "Failed to read a puzzle")))
       (doseq [err errors] (println err)))))
