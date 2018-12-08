@@ -1,5 +1,5 @@
 (ns npclj.puzzle
-  (:refer-clojure :exclude [reduce]))
+  (:refer-clojure :exclude [prn reduce]))
 
 (def directions [[1 0] [0 1] [-1 0] [0 -1]])
 
@@ -65,3 +65,7 @@
                        (every? int? %)) pzl)
          (= (range (* size size))
             (-> pzl (flatten) (sort))))))
+
+(defn prn [pzl]
+  (doseq [row pzl]
+    (println row)))
