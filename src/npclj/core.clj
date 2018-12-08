@@ -24,9 +24,13 @@
         (println "Waiting for a puzzle...")
         (if-let [pzl (parse (line-seq (java.io.BufferedReader. *in*)))]
           (do
-            (println "The puzzle is" pzl)
+            (println "The puzzle is:")
+            (puzzle/prn pzl)
+            (println "Solving...")
             (if-let [solved (solve pzl heuristic-fn)]
-              (doseq [parent (puzzle/get-parents solved)] (println parent))
+              (doseq [parent (puzzle/get-parents solved)]
+                (println)
+                (puzzle/prn parent))
               (println "The puzzle isn't solvable")))
           (println "Failed to read a puzzle")))
       (doseq [err errors] (println err)))))
