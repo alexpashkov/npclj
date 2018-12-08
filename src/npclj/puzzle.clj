@@ -17,6 +17,10 @@
               [x y]
               (recur (inc y)))))))))
 
+(defn flat-find-tile [pzl tile]
+  (let [[x y] (find-tile pzl tile)]
+    (+ x (* y (size pzl)))))
+
 (defn get-tile [pzl coords]
   (get-in pzl (reverse coords)))
 
