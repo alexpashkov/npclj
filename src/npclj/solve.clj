@@ -2,7 +2,7 @@
   (:require [clojure.data.priority-map :refer [priority-map]]
             [npclj.puzzle :as puzzle]
             [npclj.target :refer [generate]]
-            [npclj.heuristics :refer [manhattan]]))
+            [npclj.heuristic :refer [manhattan]]))
 
 (defn- get-neighboring-coords [pzl coords]
   (->> (map #(map + % coords) puzzle/directions)
