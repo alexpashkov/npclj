@@ -1,8 +1,8 @@
-(ns npclj.heuristics
+(ns npclj.heuristic
   (:require [npclj.target :as target]
             [npclj.puzzle :as puzzle]))
 
-(defn heuristics [f pzl]
+(defn heuristics-with [f pzl]
   (let [target (target/generate (count pzl))]
     (puzzle/reduce (fn [acc tile coords]
                      (+ acc (f target tile coords)))
@@ -18,4 +18,10 @@
               coords
               (puzzle/find-tile target tile))))
 
-(def manhattan (partial heuristics manhattan-tile))
+
+(def manhattan (partial heuristics-with manhattan-tile))
+
+(def fns {
+          "manhattan" manhattan
+          "lala"      manhattan
+          "tata"      manhattan})

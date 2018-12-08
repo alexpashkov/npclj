@@ -1,6 +1,6 @@
 (ns npclj.heuristics_test
   (:require [clojure.test :refer :all]
-            [npclj.heuristics :refer :all]))
+            [npclj.heuristic :refer :all]))
 
 (deftest manahattan-test
   (is (= 0 (manhattan [[1 2 3]
