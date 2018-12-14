@@ -47,7 +47,6 @@
              (if-not (or (contains? open-set neighbor)
                          (contains? closed-set neighbor))
                (-> (assoc open-set neighbor neighbor-cost)
-                   (update-max-count)
                    (vary-meta update :selects inc))
                open-set)
              closed-set))
@@ -64,13 +63,13 @@
            closed-set (with-meta #{} {:max-count 0})]
       (when-let [cur (peek open-set)]
         (let [open-set (pop open-set)
-              closed-set (-> (conj closed-set cur)
-                             (update-max-count))]
+              closed-set (conj closed-set cur)]
           (if (not= cur target)
             (let [[open-set closed-set] (handle-neighbors (get-neighbors cur)
                                                           open-set
                                                           closed-set)]
-              (recur open-set closed-set))
+              (recur (update-max-count open-set)
+                     (update-max-count closed-set)))
             (merge-with +
                         (meta open-set)
                         (meta closed-set)
