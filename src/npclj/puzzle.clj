@@ -76,4 +76,4 @@
 
 (defn prn [pzl]
   (doseq [row pzl]
-    (println row)))
+    (apply println row)))
