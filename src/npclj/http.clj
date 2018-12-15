@@ -56,7 +56,9 @@
                      (-> (generate size true)
                          (response-ok)
                          (json/write-str))))
-                 (catch Exception _ (response-err "Invalid size")))})))
+                 (catch Exception _ (response-err "Invalid size")))})
+   :access-control-allow-origin #".*"
+   :access-control-allow-methods #{:get :post}))
 
 (defn- solve-to-json
   [body heuristic-fn]

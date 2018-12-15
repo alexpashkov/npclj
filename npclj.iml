@@ -45,6 +45,7 @@
     <orderEntry type="library" name="Leiningen: org.mozilla/rhino:1.7R5" level="project" />
     <orderEntry type="library" name="Leiningen: rewrite-clj:0.4.12" level="project" />
     <orderEntry type="library" name="Leiningen: rewrite-cljs:0.4.1" level="project" />
+    <orderEntry type="library" name="Leiningen: ring-cors:0.1.0" level="project" />
     <orderEntry type="library" name="Leiningen: ring/ring-codec:1.1.0" level="project" />
     <orderEntry type="library" name="Leiningen: ring/ring-core:1.6.3" level="project" />
   </component>
