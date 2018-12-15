@@ -1,6 +1,6 @@
-(ns npclj.target-test
+(ns npclj.generate-test
   (:require [clojure.test :refer :all]
-            [npclj.target :refer :all]))
+            [npclj.generate :refer [generate]]))
 
 (deftest target-test
   (is (= (generate 1) [[0]]))

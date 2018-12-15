@@ -1,5 +1,5 @@
 (ns npclj.heuristic
-  (:require [npclj.target :as target]
+  (:require [npclj.generate :as target]
             [npclj.puzzle :as puzzle]))
 
 (defn heuristics-with [f pzl]

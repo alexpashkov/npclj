@@ -1,7 +1,7 @@
 (ns npclj.solve
   (:require [clojure.data.priority-map :refer [priority-map]]
             [npclj.puzzle :as puzzle]
-            [npclj.target :refer [generate]]))
+            [npclj.generate :refer [generate]]))
 
 (defn- get-neighboring-coords [pzl coords]
   (->> (map #(map + % coords) puzzle/directions)

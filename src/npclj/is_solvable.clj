@@ -1,5 +1,5 @@
 (ns npclj.is-solvable
-  (:require [npclj.target :as target]
+  (:require [npclj.generate :as target]
             [npclj.puzzle :as puzzle])
   (:gen-class))
 

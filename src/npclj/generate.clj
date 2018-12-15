@@ -1,4 +1,4 @@
-(ns npclj.target
+(ns npclj.generate
   (:require [npclj.puzzle :as puzzle]))
 
 (defn- next-coords [coords dir]
