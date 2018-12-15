@@ -14,12 +14,6 @@
   (doseq [msg msg-list]
     (println (str "[SERVER] " msg))))
 
-(defn- homepage-handler [heur]
-  (fn [req]
-      {:status  200
-       :headers {"Content-Type" "text/html"}
-       :body    "Homepage."}))
-
 (defn- response-err [msg]
   (do
     (server-log (str "[ERROR] " msg))
@@ -58,7 +52,7 @@
 (defn http-mode [heuristic-fn]
   (do
     (defroutes np-routes
-      (GET "/" [] (homepage-handler heuristic-fn))
+      (GET "/" [] (io/resource "client/build/index.html"))
       (POST "/" [] (solver-handler heuristic-fn))
       (route/files "/static/" {:root "./client/build"}))
     (server-log "Setting up.")
