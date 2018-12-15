@@ -8,14 +8,14 @@
 
 (def find-tile
   (memoize
-    (fn [pzl tile]
-      "Find coordinates of a tile, returns nil if not found"
-      (loop [y 0]
-        (when (< y (count pzl))
-          (let [x (.indexOf (pzl y) tile)]
-            (if (>= x 0)
-              [x y]
-              (recur (inc y)))))))))
+   (fn [pzl tile]
+     "Find coordinates of a tile, returns nil if not found"
+     (loop [y 0]
+       (when (< y (count pzl))
+         (let [x (.indexOf (pzl y) tile)]
+           (if (>= x 0)
+             [x y]
+             (recur (inc y)))))))))
 
 (defn flat-find-tile [pzl tile]
   (let [[x y] (find-tile pzl tile)]
@@ -31,11 +31,15 @@
 (defn get-parent [pzl]
   (:parent (meta pzl)))
 
-(defn get-parents [pzl]
-  (loop [parent (get-parent pzl) parents ()]
-    (if parent
-      (recur (get-parent parent) (conj parents parent))
-      parents)))
+(defn get-parents
+  ([pzl]
+   (get-parents pzl false))
+  ([pzl include-pzl?]
+   (loop [parent (get-parent pzl)
+          parents (if include-pzl? (list pzl) ())]
+     (if parent
+       (recur (get-parent parent) (conj parents parent))
+       parents))))
 
 (defn count-parents [pzl]
   (loop [pzl pzl count 0]
@@ -53,12 +57,12 @@
   (loop [acc seed pzl pzl y 0]
     (if-let [row (first pzl)]
       (recur
-        (loop [acc acc row row x 0]
-          (if-let [tile (first row)]
-            (recur (f acc tile [x y]) (rest row) (inc x))
-            acc))
-        (rest pzl)
-        (inc y))
+       (loop [acc acc row row x 0]
+         (if-let [tile (first row)]
+           (recur (f acc tile [x y]) (rest row) (inc x))
+           acc))
+       (rest pzl)
+       (inc y))
       acc)))
 
 (defn valid? [pzl]
@@ -72,4 +76,4 @@
 
 (defn prn [pzl]
   (doseq [row pzl]
-    (println row)))
+    (apply println row)))

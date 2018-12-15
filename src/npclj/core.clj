@@ -36,17 +36,23 @@
         (println "Waiting for a puzzle...")
         (if-let [pzl (parse (line-seq (java.io.BufferedReader. *in*)))]
           (do
-            (println "The puzzle is:")
+            (println "The puzzle is:\n")
             (puzzle/prn pzl)
-            (println "Solving...")
+            (println "\nSolving...\n")
             (if-let [solved (and (solvable? pzl)
                                  (solve pzl heuristic-fn))]
-              (do
-                (doseq [parent (puzzle/get-parents solved)]
-                  (println)
-                  (puzzle/prn parent))
-                (println)
-                (puzzle/prn solved))
+              (let [{:keys [states max-count selects]} solved]
+                (do
+                  (doseq [parent states]
+                    (puzzle/prn parent)
+                    (println)
+                    )
+                  (println "Total number of states ever selected in the open set:"
+                           selects)
+                  (println "Maximum number of states represented in memory at the same time:"
+                           max-count)
+                  (println "Number of moves required to transition from the initial state to the final state:"
+                           (dec (count states)))))
               (println "The puzzle isn't solvable")))
           (println "Failed to read a puzzle")))
       (doseq [err errors] (println err))))))
