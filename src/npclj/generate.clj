@@ -12,7 +12,7 @@
 
 (defn- shuffle
   ([pzl]
-   (shuffle pzl 100))
+   (shuffle pzl 50))
   ([pzl i]
    (loop [pzl pzl
           zero-coords (puzzle/find-tile pzl 0)

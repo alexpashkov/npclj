@@ -9,6 +9,7 @@ const getJSON = (url, options) => fetch(url, options).then(res => res.json());
 class App extends Component {
   state = {
     solving: false,
+    waiting: false,
     puzzle: [[1, 2, 3], [8, 0, 4], [7, 6, 5]],
     size: 4
   };
@@ -22,12 +23,13 @@ class App extends Component {
     this.setState({ size: +value });
 
   solve = () => {
-    this.setState({ solving: true });
+    this.setState({ solving: true, waiting: true });
     getJSON(ROOT_URL, {
       method: "POST",
       body: JSON.stringify({ puzzle: this.state.puzzle })
     })
       .then(({ status, result }) => {
+        this.setState({ waiting: false });
         if (status !== "ok") throw new Error(status);
         const showStates = states => {
           if (!states || !states.length) {
@@ -47,7 +49,7 @@ class App extends Component {
   };
 
   render() {
-    const { puzzle, size, solving } = this.state;
+    const { puzzle, size, solving, waiting } = this.state;
     return (
       <div>
         <button onClick={this.generate} disabled={solving}>
@@ -60,6 +62,7 @@ class App extends Component {
           onChange={this.onSizeChange}
         />
         <Puzzle>{puzzle}</Puzzle>
+        {waiting && <div>Solving...</div>}
         <button onClick={this.solve} disabled={solving}>
           Solve!
         </button>
