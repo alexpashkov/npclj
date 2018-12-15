@@ -26,10 +26,16 @@
         (+ (Math/pow (- x2 x1) 2)
            (Math/pow (- y2 y1) 2))))))
 
+(defn hamming-tile [target tile coords]
+  (if (= coords (puzzle/find-tile target tile))
+    0
+    1))
+
 (def manhattan (partial heuristics-with manhattan-tile))
 (def euclidean (partial heuristics-with euclidean-tile))
+(def hamming   (partial heuristics-with hamming-tile))
 
 (def fns {
           "manhattan" manhattan
           "euclidean" euclidean
-          "tata"      manhattan})
+          "hamming"   hamming})
