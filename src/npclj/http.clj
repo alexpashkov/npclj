@@ -21,8 +21,10 @@
        :body    "Homepage."}))
 
 (defn- response-err [msg]
-  { :status :error
-    :error  msg })
+  (do
+    (server-log (str "[ERROR] " msg))
+    { :status :error
+      :error  msg }))
 
 (defn- response-ok [result]
   { :status :ok
@@ -34,16 +36,16 @@
     (try
       (if-let
         [json-req (json/read (io/reader body) :encoding "UTF-8")]
-        (do
-          (server-log "Got puzzle:" json-req)
           (if-let
             [pzl (json-req "puzzle")]
-            (if (puzzle/valid? pzl)
-              (if (solvable? pzl)
-                (response-ok (solve pzl heuristic-fn))
-                (response-err "Puzzle is not solvable"))
-              (response-err  "Invalid puzzle."))
-            (response-err "No puzzle provided.")))
+            (do
+              (server-log "Got puzzle:" (str "\t" pzl))
+              (if (puzzle/valid? pzl)
+                (if (solvable? pzl)
+                  (response-ok (solve pzl heuristic-fn))
+                  (response-err "Puzzle is not solvable"))
+                (response-err  "Invalid puzzle.")))
+            (response-err "No puzzle provided."))
           (response-err "Failed to read JSON."))
       (catch Exception e (response-err "That is definitely not a correct puzzle...")))))
 
