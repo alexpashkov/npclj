@@ -7,7 +7,8 @@
             [npclj.is-solvable :refer [solvable?]]
             [compojure.core :refer :all]
             [compojure.route :as route]
-            [clojure.data.json :as json])
+            [clojure.data.json :as json]
+            [ring.middleware.cors :refer [wrap-cors]])
   (:gen-class))
 
 (defn- server-log [& msg-list]
@@ -44,10 +45,13 @@
       (catch Exception e (response-err "That is definitely not a correct puzzle...")))))
 
 (defn- solver-handler [heur]
-  (fn [req]
-    {:status  200
-     :headers {"Content-Type" "application/json"}
-     :body    (solve-to-json (:body req) heur)}))
+    (wrap-cors
+      (fn [req]
+        {:status  200
+         :headers {"Content-Type" "application/json"}
+         :body    (solve-to-json (:body req) heur)})
+      :access-control-allow-origin #".*"
+      :access-control-allow-methods #{:get :post}))
 
 (defn http-mode [heuristic-fn]
   (do
