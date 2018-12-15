@@ -1,11 +1,7 @@
 (ns npclj.core
   (:require [clojure.tools.cli :as cli]
             [clojure.string :as str]
-            [npclj.parser :refer [parse]]
-            [npclj.solve :refer [solve]]
-            [npclj.puzzle :as puzzle]
             [npclj.heuristic :as heuristic]
-            [npclj.is-solvable :refer [solvable?]]
             [npclj.mode :as mode])
   (:gen-class))
 
