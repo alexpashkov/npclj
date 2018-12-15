@@ -30,9 +30,9 @@
                 (dec i)))
        pzl))))
 
-(defn- generate-
+(defn generate
   ([sz]
-   (generate- sz false))
+   (generate sz false))
   ([sz shuffle?]
    "Generates solved puzzle of size sz"
    (loop [next-dir (next-dir-gen)
@@ -50,8 +50,3 @@
                 (inc i)
                 (next-coords coords dir)
                 dir))))))
-
-;; memoized version of gen-target
-(def generate (memoize generate-))
-
-(generate 5 true)

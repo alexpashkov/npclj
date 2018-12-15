@@ -22,9 +22,9 @@
   (let [[x1 y1] coords
         [x2 y2] (puzzle/find-tile target tile)]
     (int
-      (Math/sqrt
-        (+ (Math/pow (- x2 x1) 2)
-           (Math/pow (- y2 y1) 2))))))
+     (Math/sqrt
+      (+ (Math/pow (- x2 x1) 2)
+         (Math/pow (- y2 y1) 2))))))
 
 (defn hamming-tile [target tile coords]
   (if (= coords (puzzle/find-tile target tile))
@@ -35,7 +35,6 @@
 (def euclidean (partial heuristics-with euclidean-tile))
 (def hamming   (partial heuristics-with hamming-tile))
 
-(def fns {
-          "manhattan" manhattan
+(def fns {"manhattan" manhattan
           "euclidean" euclidean
           "hamming"   hamming})
