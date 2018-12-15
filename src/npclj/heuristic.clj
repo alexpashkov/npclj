@@ -18,10 +18,18 @@
               coords
               (puzzle/find-tile target tile))))
 
+(defn euclidean-tile [target tile coords]
+  (let [[x1 y1] coords
+        [x2 y2] (puzzle/find-tile target tile)]
+    (int
+      (Math/sqrt
+        (+ (Math/pow (- x2 x1) 2)
+           (Math/pow (- y2 y1) 2))))))
 
 (def manhattan (partial heuristics-with manhattan-tile))
+(def euclidean (partial heuristics-with euclidean-tile))
 
 (def fns {
           "manhattan" manhattan
-          "lala"      manhattan
+          "euclidean" euclidean
           "tata"      manhattan})

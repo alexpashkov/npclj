@@ -42,7 +42,9 @@
                 (response-err  "Invalid puzzle.")))
             (response-err "No puzzle provided."))
           (response-err "Failed to read JSON."))
-      (catch Exception e (response-err "That is definitely not a correct puzzle...")))))
+      (catch Exception e (do
+                           (server-log e)
+                           (response-err "That is definitely not a correct puzzle..."))))))
 
 (defn- solver-handler [heur]
     (wrap-cors
