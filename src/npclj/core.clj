@@ -5,7 +5,8 @@
             [npclj.solve :refer [solve]]
             [npclj.puzzle :as puzzle]
             [npclj.heuristic :as heuristic]
-            [npclj.is-solvable :refer [solvable?]])
+            [npclj.is-solvable :refer [solvable?]]
+            [npclj.mode :as mode])
   (:gen-class))
 
 (def cli-options [["-h" "--heuristic NAME" "Heuristic name"
@@ -14,14 +15,24 @@
                    :validate [fn?
                               (str "Unknown heuristic is provided. "
                                    "Available names are: "
-                                   (str/join ", " (keys heuristic/fns)))]]])
+                                   (str/join ", " (keys heuristic/fns)))]]
+                  ["-m" "--mode MODE" "NPuzzle mode"
+                   :default (mode/np-modes "cli")
+                   :parse-fn mode/np-modes
+                   :validate [fn?
+                              (str "Unknown mode is provided. "
+                                   "Available modes are: "
+                                   (str/join ", " (keys mode/np-modes)))]]])
 
 (defn -main
   [& args]
-  (let [{{heuristic-fn :heuristic} :options
+  (let [{{heuristic-fn :heuristic
+          np-mode-fn   :mode}      :options
          errors                    :errors} (cli/parse-opts args cli-options)]
     (if-not errors
       (do
+        (np-mode-fn heuristic-fn)
+        (comment
         (println "Waiting for a puzzle...")
         (if-let [pzl (parse (line-seq (java.io.BufferedReader. *in*)))]
           (do
@@ -44,4 +55,4 @@
                            (dec (count states)))))
               (println "The puzzle isn't solvable")))
           (println "Failed to read a puzzle")))
-      (doseq [err errors] (println err)))))
+      (doseq [err errors] (println err))))))
