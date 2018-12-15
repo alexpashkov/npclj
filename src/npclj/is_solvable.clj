@@ -15,7 +15,6 @@
                  0
                  pzl))
 
-
 (defn- inversions [pzl]
   (puzzle/reduce (fn [acc tile coords]
                    (+ acc (tile-inversions pzl tile coords)))
@@ -23,7 +22,6 @@
                    (puzzle/flat-find-tile pzl 0)
                    0)
                  pzl))
-
 
 (defn solvable? [pzl]
   (=
