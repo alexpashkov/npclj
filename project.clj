@@ -9,6 +9,7 @@
                  [http-kit "2.3.0"]
                  [compojure "1.6.1"]
                  [org.clojure/data.json "0.2.6"]]
+  :plugins [[lein-cljfmt "0.6.3"]]
   :main ^:skip-aot npclj.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

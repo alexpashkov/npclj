@@ -18,10 +18,8 @@
               coords
               (puzzle/find-tile target tile))))
 
-
 (def manhattan (partial heuristics-with manhattan-tile))
 
-(def fns {
-          "manhattan" manhattan
+(def fns {"manhattan" manhattan
           "lala"      manhattan
           "tata"      manhattan})

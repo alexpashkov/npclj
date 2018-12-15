@@ -25,5 +25,5 @@
 
 (defn solvable? [pzl]
   (=
-    (even? (inversions pzl))
-    (even? (inversions (target/generate (puzzle/size pzl))))))
+   (even? (inversions pzl))
+   (even? (inversions (target/generate (puzzle/size pzl))))))

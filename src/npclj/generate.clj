@@ -53,3 +53,5 @@
 
 ;; memoized version of gen-target
 (def generate (memoize generate-))
+
+(generate 5 true)
