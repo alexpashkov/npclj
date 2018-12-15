@@ -77,3 +77,14 @@
 (defn prn [pzl]
   (doseq [row pzl]
     (apply println row)))
+
+(defn get-neighboring-coords [pzl coords]
+  (->> (map #(map + % coords) directions)
+       (filter (partial coords-within? pzl))))
+
+(defn swap-tiles [pzl a-coords b-coords]
+  (let [a-tile (get-tile pzl a-coords)
+        b-tile (get-tile pzl b-coords)]
+    (-> pzl
+        (assoc-in (reverse a-coords) b-tile)
+        (assoc-in (reverse b-coords) a-tile))))
