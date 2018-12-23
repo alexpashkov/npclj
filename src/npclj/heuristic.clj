@@ -21,10 +21,9 @@
 (defn euclidean-tile [target tile coords]
   (let [[x1 y1] coords
         [x2 y2] (puzzle/find-tile target tile)]
-    (int
-     (Math/sqrt
+    (Math/sqrt
       (+ (Math/pow (- x2 x1) 2)
-         (Math/pow (- y2 y1) 2))))))
+         (Math/pow (- y2 y1) 2)))))
 
 (defn hamming-tile [target tile coords]
   (if (= coords (puzzle/find-tile target tile))
